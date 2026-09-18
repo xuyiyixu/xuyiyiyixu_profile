@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+    <link rel="icon" href="../assets/images/profile.jpg" />
+		<title>Pulmonary Segmentation | Yi Xu</title>
+    <meta name="description" content="3D U-Net vessel and airway segmentation from thoracic CT scans.">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/typography.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+
+		<script defer src="../js/script.js"></script>
+	</head>
+	<body>
+    <div class="navbar">
+      <a class="nav-title-link" href="../index.html">
+        <span class="nav-title">Yi Xu — Portfolio</span>
+        <a class="button" href="mailto:yix3@andrew.cmu.edu">
+          <span class="button-text">Contact Me</span>
+        </a>
+      </a>
+    </div>
+
+    <div id="main-content">
+      <div id="project-header">
+        <div class="main-title">Pulmonary Segmentation</div>
+        <div class="body-text">Shanghai Jiao Tong University · Research · Jan 2023 – May 2024</div>
+        <div class="body-text">A 3D U-Net pipeline for pulmonary vessel and airway segmentation from thoracic CT, with topology-aware losses to keep thin structures connected.</div>
+        <img class="project-header-image" src="../assets/images/sketchbook.jpeg" alt="Sketches and notes on a desk">
+      </div>
+
+      <div id="project-details">
+        <div class="subheader-text">The problem</div>
+        <div class="project-details-content">
+          <div class="body-text">Pulmonary vessels and airways in thoracic CT are thin, branching trees. A segmentation that looks fine in voxel overlap can still be wrong in the way that matters clinically: a broken centerline, a leak into nearby tissue, or a missing distal branch. Standard 3D models trained only with region overlap will take those shortcuts. Filling a gap with a blob, or cutting a vessel where contrast is weak, barely moves Dice and completely changes the topology.</div>
+          <div class="body-text">Full-resolution 3D volumes are also awkward to train on. GPU memory pushes you toward patches, while the structure you care about spans many slices. This project combined 2D preprocessing, patch-based 3D training, volumetric reconstruction, and topology-aware supervision so the reconstructed trees stayed connected instead of only looking filled-in.</div>
+        </div>
+      </div>
+
+      <div class="project-section">
+        <div class="subheader-text">2D–3D pipeline</div>
+        <div class="project-details-content">
+          <div class="body-text">I built a 3D U-Net pipeline that does not throw the volume at the network raw. 2D slice-level preprocessing handles per-slice normalization and cleanup before 3D patch-based training sees the data. Patches make training feasible; volumetric reconstruction stitches predictions back into a full scan. Data augmentation had to respect anatomy — intensity and geometric variation that still looks like CT — rather than generic image flips that break left/right lung structure.</div>
+          <div class="body-text">I also used 2D–3D projection in two directions. Qualitatively, projecting 3D predictions down to 2D made it much easier to see leakage and broken branches than scrolling a voxel cube. Practically, the same projection helped reconstruct volumes from 2D segmentation outputs, so 2D signals could still inform the 3D result instead of living in a separate demo.</div>
+        </div>
+      </div>
+
+      <div class="project-section">
+        <div class="subheader-text">Topology-aware training</div>
+        <div class="project-details-content">
+          <div class="body-text">Baseline predictions failed in two characteristic ways: leakage, where the mask bled off the vessel, and discontinuity, where a thin branch disappeared for a few slices and the tree split. A connectivity-preserving loss penalizes those breaks directly, instead of waiting for voxel Dice to notice. If the centerline is gone, the loss should move, even when most voxels in a thick trunk are still correct.</div>
+          <div class="body-text">I evaluated with clDice (centerline Dice) in addition to region overlap. clDice compares skeletons, so a fat, leaky mask that covers the vessel but also the surroundings scores worse than a thinner mask that follows the true path. That metric is what made topology a first-class objective rather than something we only inspected in screenshots.</div>
+        </div>
+      </div>
+
+      <div class="project-section">
+        <div class="subheader-text">Results & stack</div>
+        <div class="project-details-content">
+          <div class="body-text">The pipeline produced vessel and airway segmentations from thoracic CT by combining 2D preprocessing, 3D U-Net patches, volumetric reconstruction, and topology-aware supervision. Connectivity-preserving loss and clDice were aimed at the failure modes voxel Dice hides: leakage and broken centerlines.</div>
+          <div class="body-text">Python · PyTorch · 3D U-Net · volumetric CT · clDice · connectivity-preserving loss · 2D–3D projection</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="footer">
+      <a class="icon-link" href="mailto:yix3@andrew.cmu.edu" aria-label="Email Yi Xu">
+        <image src="../assets/icons/mail.svg" class="footer-icon"/>
+      </a>
+    </div>
+	</body>
+</html>

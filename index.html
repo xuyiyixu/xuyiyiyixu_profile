@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 
-    <link rel="icon" href="./assets/images/code.jpeg" />
+    <link rel="icon" href="./assets/images/profile.jpg" />
 		<title>Yi Xu | AI/ML Engineer</title>
     <meta name="description" content="Yi Xu's portfolio: AI applications, ML systems, and computer vision.">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -31,17 +31,17 @@
       <!-- PORTFOLIO HEADER -->
       <div id="portfolio-header">
         <div id="portfolio-header-image-container">
-          <img src="./assets/images/code.jpeg" class="portfolio-header-image" alt="Code on a computer screen">
+          <img src="./assets/images/profile.jpg" class="portfolio-header-image" alt="Code on a computer screen">
           <span class="image-caption">AI/ML systems and software engineering</span>
         </div>
 
         <div id="portfolio-header-text-container">
             <div class="header-text">
-              <span class="main-title">Hi, I'm Yi Xu.</span>
+              <span class="main-title">Hi, I'm Shirley(Yi) Xu.</span>
               <div class="body-text">I build AI applications and ML systems, with experience in agent-based developer tools, retrieval and streaming pipelines, and computer vision.</div>
             </div>
-            <a class="button" id="my-work-link">
-              <span class="button-text">View selected work</span>
+            <a class="button" id="my-work-link" href="#internships-section">
+              <span class="button-text">View internships</span>
               <image src="./assets/icons/arrow-right.svg" class="right-arrow-icon"/>
             </a>
         </div>
@@ -51,39 +51,97 @@
       <div id="about-section">
         <span class="subheader-text">Background / About</span>
         <div class="about-section-content">
-          <div class="body-text">I am an M.S. student in Electrical and Computer Engineering at Carnegie Mellon University. During internships at AIA, JD.com, and Deloitte, I worked on AI product engineering, conversational systems, and document intelligence.</div>
-          <div class="body-text">I am looking for AI/ML engineering or software engineering roles focused on AI applications and ML systems. I work mainly with Python, C/C++, JavaScript, SQL, PyTorch, React, REST and streaming APIs, Redis, and Elasticsearch.</div>
+          <div class="body-text">I'm a master's student in Electrical and Computer Engineering at Carnegie Mellon (graduating December 2027), after a B.E. in Automation and a minor in Economics at Shanghai Jiao Tong University (GPA 3.80/4.00). I'm looking for ML / AI engineering or software engineering internships now, and full-time roles after graduation. I'm most interested in LLM applications, agents, and retrieval pipelines.</div>
+          <div class="body-text">I build LLM agents and the systems around them. Recent internships: AIA (slide-generation and UI-editing agents), JD.com (memory retrieval and a streaming voice pipeline), and Deloitte (table and chart detection). I also have research in adversarial robustness and 3D medical segmentation, and a publication on diffusion-based image classification. I write mostly Python and C/C++, use PyTorch for models, and work with JavaScript and React on the front end, and SQL, REST and streaming APIs, and Redis on the backend.</div>
         </div>
       </div>
 
-      <!-- PROJECTS / MY WORK SECTION -->
-      <div id="my-work-section">
-        <span class="subheader-text">Selected Work</span>
+      <!-- INTERNSHIPS -->
+      <div id="internships-section" class="work-section">
+        <span class="subheader-text">Internships</span>
 
         <div class="projects-container">
           <div class="project-card">
-            <img src="./assets/images/desktop.jpeg" class="project-image" alt="Desktop development workspace">
+            <img src="./assets/images/aia.jpeg" class="project-image" alt="Desktop development workspace">
             <div class="project-card-text-container">
               <div class="subheader-text project-title">Presentation Generation</div>
-              <div class="body-text project-card-text">Built a multi-agent pipeline that generates editable, brand-aligned presentations with visual validation and automated repair.</div>
+              <div class="body-text project-card-text">AIA: a multi-agent pipeline that turns PPTX templates into editable, brand-aligned decks, with visual validation, repair, and a tool-calling UI agent for React apps.</div>
             </div>
-            <span class="button"><span class="button-text">Python · React · HTML/CSS</span></span>
+            <a class="button" href="./project-pages/presentation-generation.html">
+              <span class="button-text">Read More</span>
+              <image src="./assets/icons/arrow-right.svg" class="right-arrow-icon"/>
+            </a>
           </div>
+          <div class="project-card">
+            <img src="./assets/images/jd.png" class="project-image" alt="Source code on a computer screen">
+            <div class="project-card-text-container">
+              <div class="subheader-text project-title">Conversational AI</div>
+              <div class="body-text project-card-text">JD.com: user-scoped memory retrieval with Redis and Elasticsearch, plus a streaming ASR–LLM–TTS pipeline with timeouts, cancellation, and reconnect recovery.</div>
+            </div>
+            <a class="button" href="./project-pages/conversational-ai.html">
+              <span class="button-text">Read More</span>
+              <image src="./assets/icons/arrow-right.svg" class="right-arrow-icon"/>
+            </a>
+          </div>
+          <div class="project-card">
+            <img src="./assets/images/deloitte.jpeg" class="project-image" alt="Documents and sketches on a desk">
+            <div class="project-card-text-container">
+              <div class="subheader-text project-title">ESG Document AI</div>
+              <div class="body-text project-card-text">Deloitte: YOLOv8 table and chart detection on ESG reports, extended with OCR and question answering, reaching 95% extraction accuracy in manual review.</div>
+            </div>
+            <a class="button" href="./project-pages/esg-document-ai.html">
+              <span class="button-text">Read More</span>
+              <image src="./assets/icons/arrow-right.svg" class="right-arrow-icon"/>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECTS -->
+      <div id="projects-section" class="work-section">
+        <span class="subheader-text">Projects</span>
+
+        <div class="projects-container">
+          <div class="project-card">
+            <img src="./assets/images/desktop.jpeg" class="project-image" alt="Camera on a table">
+            <div class="project-card-text-container">
+              <div class="subheader-text project-title">Adversarial Robustness</div>
+              <div class="body-text project-card-text">University of Sydney: randomized weight perturbation and logit calibration, with a 5% relative gain in robust accuracy under AutoAttack and PGD.</div>
+            </div>
+            <a class="button" href="./project-pages/adversarial-robustness.html">
+              <span class="button-text">Read More</span>
+              <image src="./assets/icons/arrow-right.svg" class="right-arrow-icon"/>
+            </a>
+          </div>
+          <div class="project-card">
+            <img src="./assets/images/sketchbook.jpeg" class="project-image" alt="Sketches and notes on a desk">
+            <div class="project-card-text-container">
+              <div class="subheader-text project-title">Pulmonary Segmentation</div>
+              <div class="body-text project-card-text">SJTU: a 3D U-Net for pulmonary vessel and airway segmentation from CT, using a connectivity-preserving loss and clDice to keep thin structures intact.</div>
+            </div>
+            <a class="button" href="./project-pages/pulmonary-segmentation.html">
+              <span class="button-text">Read More</span>
+              <image src="./assets/icons/arrow-right.svg" class="right-arrow-icon"/>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- PUBLICATIONS -->
+      <div id="publications-section" class="work-section">
+        <span class="subheader-text">Publications</span>
+
+        <div class="projects-container">
           <div class="project-card">
             <img src="./assets/images/code.jpeg" class="project-image" alt="Source code on a computer screen">
             <div class="project-card-text-container">
-              <div class="subheader-text project-title">Conversational AI</div>
-              <div class="body-text project-card-text">Integrated long-term memory retrieval and resilient streaming ASR-LLM-TTS flows with timeouts, cancellation, and reconnect recovery.</div>
+              <div class="subheader-text project-title">ITCD Classification</div>
+              <div class="body-text project-card-text">ACM ESGMFM '24: diffusion-based image classification with frozen ViT and BERT encoders, 0.7 ms/image inference, and training-free OOD detection.</div>
             </div>
-            <span class="button"><span class="button-text">Python · Redis · Elasticsearch</span></span>
-          </div>
-          <div class="project-card">
-            <img src="./assets/images/sketchbook.jpeg" class="project-image" alt="Documents and sketches on a desk">
-            <div class="project-card-text-container">
-              <div class="subheader-text project-title">ESG Document AI</div>
-              <div class="body-text project-card-text">Built a YOLOv8 table and chart detection pipeline extended with OCR and question answering, reaching 95% accuracy in manual review.</div>
-            </div>
-            <span class="button"><span class="button-text">Python · PyTorch · YOLOv8</span></span>
+            <a class="button" href="./project-pages/itcd-classification.html">
+              <span class="button-text">Read More</span>
+              <image src="./assets/icons/arrow-right.svg" class="right-arrow-icon"/>
+            </a>
           </div>
         </div>
       </div>

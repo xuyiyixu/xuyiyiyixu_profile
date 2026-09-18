@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+    <link rel="icon" href="../assets/images/profile.jpg" />
+		<title>Presentation Generation | Yi Xu</title>
+    <meta name="description" content="Multi-agent presentation generation and UI-editing agents built at AIA.">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/typography.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+
+		<script defer src="../js/script.js"></script>
+	</head>
+	<body>
+    <div class="navbar">
+      <a class="nav-title-link" href="../index.html">
+        <span class="nav-title">Yi Xu — Portfolio</span>
+        <a class="button" href="mailto:yix3@andrew.cmu.edu">
+          <span class="button-text">Contact Me</span>
+        </a>
+      </a>
+    </div>
+
+    <div id="main-content">
+      <div id="project-header">
+        <div class="main-title">Presentation Generation</div>
+        <div class="body-text">AIA · AI Engineer Intern · Mar 2026 – Jun 2026</div>
+        <div class="body-text">A multi-agent pipeline that turns reusable PPTX templates into natively editable, brand-aligned presentations, plus a tool-calling UI agent for React apps.</div>
+        <img class="project-header-image" src="../assets/images/aia.jpeg" alt="Desktop workspace used to represent the presentation generation project">
+      </div>
+
+      <div id="project-details">
+        <div class="subheader-text">The problem</div>
+        <div class="project-details-content">
+          <div class="body-text">Internal teams already had brand-approved PPTX templates, but turning those templates into a finished deck still meant a lot of manual layout work. Generating slides as images or locked files was not enough: people needed something they could keep editing, that still looked like the brand, and that did not silently drift off-template after a model rewrite.</div>
+          <div class="body-text">The same gap showed up in product UI work. Asking an LLM to “make this React screen look better” fails if the agent cannot see the running page, cannot find the source file for a clicked element, and cannot retry when the first patch is wrong. I spent the internship on both sides of that problem: presentation generation with a closed validation loop, and a UI-design agent that could plan, edit, inspect, and repair against a live app.</div>
+        </div>
+      </div>
+
+      <div class="project-section">
+        <div class="subheader-text">Presentation pipeline</div>
+        <div class="project-details-content">
+          <div class="body-text">I architected and deployed a multi-agent pipeline that starts from reusable PPTX templates rather than a blank canvas. One path understands the template structure and brand constraints; another writes HTML slides from that structure so the output stays natively editable instead of becoming a flattened export. A later agent renders the result, checks it visually against the intended layout, and sends failed slides back through a repair step instead of shipping the first draft.</div>
+          <div class="body-text">Keeping generation, validation, and repair as separate stages made failures local. If a slide had the right content but the wrong spacing, repair could target layout without regenerating the whole deck. If HTML generation missed a brand color or a locked placeholder, visual validation caught it before a user opened the file. The deployed system was used by 200+ internal engineers.</div>
+        </div>
+      </div>
+
+      <div class="project-section">
+        <div class="subheader-text">Evaluation</div>
+        <div class="project-details-content">
+          <div class="body-text">Generation quality is easy to over-claim from a few pretty decks, so I also built multimodal evaluation workflows around public presentation benchmarks. On SlidesBench the pipeline scored 65.5. On PPTBench it scored 96 on Detection, 95 on Understanding, and 87 on Modification — covering whether the system can find slide elements, interpret them, and apply edits without breaking the rest of the deck.</div>
+          <div class="body-text">Those numbers mattered internally because they separated “the model wrote some HTML” from “the model can see a slide, understand it, and change it.” Detection and understanding being high, with modification lower, also told us where the remaining work was: applying edits under brand constraints is harder than reading a slide.</div>
+        </div>
+      </div>
+
+      <div class="project-section">
+        <div class="subheader-text">UI-design agent</div>
+        <div class="project-details-content">
+          <div class="body-text">In parallel I built a full-stack, tool-calling agent runtime for React / HTML / CSS applications. The agent does not dump a one-shot code patch. It keeps persistent state across planning, generation, execution, and inspection, so a later turn still knows which files changed, which elements were selected, and whether the last repair actually rendered.</div>
+          <div class="body-text">The runtime orchestrates 10+ tools. Bitbucket MCP gave it repo context instead of a pasted snippet. Image reading let it look at screenshots and design references. File read/write let it apply patches in the actual source tree. The important part was not the tool count; it was that the agent could move between “what should change,” “write the change,” “run it,” and “look at what happened” without losing the session.</div>
+        </div>
+      </div>
+
+      <div class="project-section">
+        <div class="subheader-text">Browser-to-source mapping</div>
+        <div class="project-details-content">
+          <div class="body-text">A real-time dev server and a browser-to-source mapping layer connected the rendered page back to React components. Clicking an element in the browser identified the component and file to edit, so people could either type a natural-language instruction or select the thing they meant. That is much closer to how designers and engineers actually talk about a UI than asking them to name a file path.</div>
+          <div class="body-text">When the first edit was wrong, automated repair loops ran against the live page instead of stopping at a failed patch. Sessions could also switch LLM APIs mid-way, so we were not locked to one provider if a model stalled or a different API handled layout edits better. Together with the presentation pipeline, this was the internship’s through-line: generate, look at the result, repair, and keep the artifact editable.</div>
+        </div>
+      </div>
+
+      <div class="project-section">
+        <div class="subheader-text">Results & stack</div>
+        <div class="project-details-content">
+          <div class="body-text">Shipped to 200+ internal engineers. SlidesBench 65.5; PPTBench Detection 96, Understanding 95, Modification 87. The presentation path produced editable HTML from PPTX templates with visual validation and repair. The UI agent could edit a running React app from language or from a clicked element, and recover when the first patch failed.</div>
+          <div class="body-text">Python · React · HTML/CSS · LLM tool calling · Bitbucket MCP · browser-to-source mapping · multimodal evaluation</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="footer">
+      <a class="icon-link" href="mailto:yix3@andrew.cmu.edu" aria-label="Email Yi Xu">
+        <image src="../assets/icons/mail.svg" class="footer-icon"/>
+      </a>
+    </div>
+	</body>
+</html>

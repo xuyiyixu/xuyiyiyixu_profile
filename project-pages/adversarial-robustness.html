@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+    <link rel="icon" href="../assets/images/profile.jpg" />
+		<title>Adversarial Robustness | Yi Xu</title>
+    <meta name="description" content="Adversarial defense with randomized weight perturbation and logit calibration.">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/typography.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+
+		<script defer src="../js/script.js"></script>
+	</head>
+	<body>
+    <div class="navbar">
+      <a class="nav-title-link" href="../index.html">
+        <span class="nav-title">Yi Xu — Portfolio</span>
+        <a class="button" href="mailto:yix3@andrew.cmu.edu">
+          <span class="button-text">Contact Me</span>
+        </a>
+      </a>
+    </div>
+
+    <div id="main-content">
+      <div id="project-header">
+        <div class="main-title">Adversarial Robustness</div>
+        <div class="body-text">University of Sydney · Research · May 2024 – Oct 2024</div>
+        <div class="body-text">An adversarial-defense framework that combines randomized weight perturbation with post-hoc logit calibration.</div>
+        <img class="project-header-image" src="../assets/images/desktop.jpeg" alt="Camera on a table">
+      </div>
+
+      <div id="project-details">
+        <div class="subheader-text">The problem</div>
+        <div class="project-details-content">
+          <div class="body-text">An image classifier can be right on a clean test set and still be easy to break. Adversarial attacks add small, structured noise that is barely visible, then push the model across a decision boundary. Many defenses either hurt clean accuracy, only work against a weak attack, or look strong until you evaluate them with a standardized suite like AutoAttack.</div>
+          <div class="body-text">This project asked a narrower question: can a relatively cheap defense — randomizing weights at inference and calibrating logits afterward — raise robust accuracy without giving up clean performance? The point was not a new architecture. It was whether those two operations, used together, were enough to make ResNet-style classifiers harder to fool under strong attacks.</div>
+        </div>
+      </div>
+
+      <div class="project-section">
+        <div class="subheader-text">Approach</div>
+        <div class="project-details-content">
+          <div class="body-text">I built a defense framework with two stages. Randomized weight perturbation injects noise into the weights at inference, so a single crafted input is no longer aligned with one fixed decision surface. An attack that was optimized against the original weights has to survive a slightly different network at test time. That stochasticity is cheap compared with adversarial training from scratch, but it also changes the model’s confidence.</div>
+          <div class="body-text">Post-hoc logit calibration is there for that second effect. Perturbing weights can make the model overconfident or poorly scaled even when the predicted class is right. Calibration rescales the logits after the fact, so robustness gains are not paid for with unusable confidence. The two pieces are doing different jobs: perturbation attacks the attacker’s alignment with the weights; calibration repairs the score distribution the classifier emits.</div>
+        </div>
+      </div>
+
+      <div class="project-section">
+        <div class="subheader-text">Evaluation</div>
+        <div class="project-details-content">
+          <div class="body-text">I evaluated on CIFAR-10, CIFAR-100, and ImageNet, using ResNet and WideResNet backbones, so the result was not tied to one small dataset or one depth. The attack side used both PGD and AutoAttack, across multiple attack budgets. PGD is a standard iterative white-box attack; AutoAttack is a stronger, more standardized ensemble that is harder to accidentally overfit a defense to.</div>
+          <div class="body-text">Comparing against other evaluated defenses under that protocol is what makes the 5% relative gain in robust accuracy meaningful. A number against a weak FGSM baseline would not have said much. The constraint that mattered as much as the gain was preserving clean accuracy: a defense that only works by blurring the model into a worse classifier is not useful.</div>
+        </div>
+      </div>
+
+      <div class="project-section">
+        <div class="subheader-text">Results & stack</div>
+        <div class="project-details-content">
+          <div class="body-text">The framework improved robust accuracy by 5% relative to the evaluated defense baselines under AutoAttack and PGD, across multiple attack budgets, while preserving clean accuracy. That held on CIFAR-10, CIFAR-100, and ImageNet with ResNet and WideResNet models.</div>
+          <div class="body-text">Python · PyTorch · ResNet · WideResNet · AutoAttack · PGD · logit calibration</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="footer">
+      <a class="icon-link" href="mailto:yix3@andrew.cmu.edu" aria-label="Email Yi Xu">
+        <image src="../assets/icons/mail.svg" class="footer-icon"/>
+      </a>
+    </div>
+	</body>
+</html>

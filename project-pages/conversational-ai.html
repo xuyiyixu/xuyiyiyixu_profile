@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+    <link rel="icon" href="../assets/images/profile.jpg" />
+		<title>Conversational AI | Yi Xu</title>
+    <meta name="description" content="Memory retrieval and streaming ASR-LLM-TTS pipelines built at JD.com.">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/typography.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+
+		<script defer src="../js/script.js"></script>
+	</head>
+	<body>
+    <div class="navbar">
+      <a class="nav-title-link" href="../index.html">
+        <span class="nav-title">Yi Xu — Portfolio</span>
+        <a class="button" href="mailto:yix3@andrew.cmu.edu">
+          <span class="button-text">Contact Me</span>
+        </a>
+      </a>
+    </div>
+
+    <div id="main-content">
+      <div id="project-header">
+        <div class="main-title">Conversational AI</div>
+        <div class="body-text">JD.com Artificial Intelligence Division · AI Solutions Engineer Intern · Sep 2025 – Nov 2025</div>
+        <div class="body-text">Long-term memory retrieval for a dialogue agent, plus a resilient streaming ASR–LLM–TTS voice pipeline.</div>
+        <img class="project-header-image" src="../assets/images/jd.png" alt="Source code on a computer screen">
+      </div>
+
+      <div id="project-details">
+        <div class="subheader-text">The problem</div>
+        <div class="project-details-content">
+          <div class="body-text">A dialogue agent that only sees the current turn forgets who the user is. Dumping the entire memory store into the prompt has the opposite problem: noise, latency, and answers that cite the wrong week or the wrong account. The product also spoke back in character. That only works if the speech path can choose a voice and an emotion, stream audio without stalling, and survive the messy cases — empty ASR, a user interrupting, a dropped connection — instead of going silent.</div>
+          <div class="body-text">I worked on two coupled pieces of that stack. First, retrieval orchestration between the dialogue agent and an internal Memory Service, so each turn got a small, relevant slice of long-term context. Second, the streaming voice path: denoise the incoming audio, recognize it, generate a reply, and speak it in the right persona, with timeouts and recovery at every stage.</div>
+        </div>
+      </div>
+
+      <div class="project-section">
+        <div class="subheader-text">Memory retrieval</div>
+        <div class="project-details-content">
+          <div class="body-text">The Memory Service already stored user history. The job was to decide what to fetch for this turn, not to rebuild storage. I implemented retrieval orchestration that starts with user-scoped ANN recall, so one user’s memories cannot leak into another user’s prompt. Temporal and metadata filters then drop hits that are too old, the wrong type, or attached to the wrong session, before a reranker scores what is actually useful for the current utterance.</div>
+          <div class="body-text">Elasticsearch hybrid search covered cases where dense retrieval alone missed a keyword, a name, or a structured field. Redis cached hot lookups so repeated turns in a live conversation did not pay the full retrieval cost every time. The output of that chain is a compact context block for the LLM — enough long-term signal to stay consistent with the user, not a transcript dump.</div>
+        </div>
+      </div>
+
+      <div class="project-section">
+        <div class="subheader-text">Persona-aware speech</div>
+        <div class="project-details-content">
+          <div class="body-text">Spoken replies had to match a character, not a generic TTS voice. I implemented persona-aware speech orchestration that reads structured agent outputs — not just the raw text — and maps them onto a character-specific voice plus seven emotion-aware speech styles. That mapping is what lets the same sentence sound calm, excited, or apologetic without asking the language model to emit SSML by hand.</div>
+          <div class="body-text">The orchestrator calls LiveTTS through an API and streams the synthesized audio back through the conversational pipeline so playback can start before the full utterance is ready. If the requested persona-specific voice is missing or the API cannot serve it, the path falls back to a default voice rather than failing the turn. Users still hear an answer; the character is best-effort, not a hard dependency.</div>
+        </div>
+      </div>
+
+      <div class="project-section">
+        <div class="subheader-text">Streaming reliability</div>
+        <div class="project-details-content">
+          <div class="body-text">On the inbound side, device audio is often noisy. I integrated cloud speech denoising into the streaming pipeline ahead of ASR so recognition had a cleaner signal before anyone tried to parse it. That helped in the actual setting — phones and speakers in imperfect rooms — more than tuning the recognizer in isolation.</div>
+          <div class="body-text">I then treated the ASR–LLM–TTS path as a system that fails in pieces. Empty recognition should not send garbage into the language model; it should fall back. Each stage needs a timeout so a hung TTS call cannot hold the session forever. If the user interrupts, in-flight synthesis has to cancel instead of talking over them. If the connection drops, reconnect recovery should resume the round rather than forcing a restart from a blank state.</div>
+          <div class="body-text">To make those cases debuggable, I used round-level tracing: one conversation turn as the unit of investigation, with enough visibility to see whether the failure was retrieval, ASR, the LLM, or TTS. That is how we isolated and fixed reliability bugs instead of arguing from a single bad demo.</div>
+        </div>
+      </div>
+
+      <div class="project-section">
+        <div class="subheader-text">Results & stack</div>
+        <div class="project-details-content">
+          <div class="body-text">The agent could pull user-scoped long-term context through ANN recall, filters, reranking, Redis, and Elasticsearch hybrid search. Spoken replies stayed persona-aware when the voice existed, and still completed when it did not. The streaming path recovered from empty ASR, per-stage timeouts, interruptions, and reconnects instead of dropping the session.</div>
+          <div class="body-text">Python · Redis · Elasticsearch · ANN retrieval · WebSocket / streaming APIs · ASR · LiveTTS · round-level tracing</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="footer">
+      <a class="icon-link" href="mailto:yix3@andrew.cmu.edu" aria-label="Email Yi Xu">
+        <image src="../assets/icons/mail.svg" class="footer-icon"/>
+      </a>
+    </div>
+	</body>
+</html>

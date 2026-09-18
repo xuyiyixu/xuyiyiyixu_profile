@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+    <link rel="icon" href="../assets/images/profile.jpg" />
+		<title>ESG Document AI | Yi Xu</title>
+    <meta name="description" content="YOLOv8 table and chart detection with OCR and question answering, built at Deloitte.">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/typography.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+
+		<script defer src="../js/script.js"></script>
+	</head>
+	<body>
+    <div class="navbar">
+      <a class="nav-title-link" href="../index.html">
+        <span class="nav-title">Yi Xu — Portfolio</span>
+        <a class="button" href="mailto:yix3@andrew.cmu.edu">
+          <span class="button-text">Contact Me</span>
+        </a>
+      </a>
+    </div>
+
+    <div id="main-content">
+      <div id="project-header">
+        <div class="main-title">ESG Document AI</div>
+        <div class="body-text">Deloitte AI & Data · Technology & Transformation Intern · Oct 2024 – Dec 2024</div>
+        <div class="body-text">A YOLOv8 document-understanding pipeline for ESG reports: table and chart detection, OCR, and LLM question answering.</div>
+        <img class="project-header-image" src="../assets/images/deloitte.jpeg" alt="Documents on a desk">
+      </div>
+
+      <div id="project-details">
+        <div class="subheader-text">The problem</div>
+        <div class="project-details-content">
+          <div class="body-text">ESG reports are not clean web pages. A single PDF can mix narrative, footnotes, multi-column tables, and charts that carry the actual numbers. Analysts were spending time hunting those figures by hand, and off-the-shelf document models did not match this client’s layout language. There was also no labeled corpus for the reports we needed to parse, so a detector could not just be fine-tuned on a public table dataset and dropped in.</div>
+          <div class="body-text">The intern project was to make extraction systematic: find tables and charts, read them, and answer questions over the extracted content, with enough quality that reviewers could trust the output instead of redoing the work.</div>
+        </div>
+      </div>
+
+      <div class="project-section">
+        <div class="subheader-text">Building the dataset</div>
+        <div class="project-details-content">
+          <div class="body-text">Before training, I wrote bounding-box annotation specifications for tables and charts on the raw client reports. That sounds like paperwork; it is what keeps a labeling team from marking a caption as a chart, splitting one table into two boxes, or ignoring a small figure in the margin. I coordinated with a dedicated labeling team to apply those specs and turn the unlabeled PDFs into a custom detection dataset.</div>
+          <div class="body-text">Without that step, later training would have been fitting noise. ESG layouts vary enough that “table” and “chart” need an explicit definition — merged cells, spanning headers, grouped bar charts, and figures that sit next to body text all showed up in the source reports.</div>
+        </div>
+      </div>
+
+      <div class="project-section">
+        <div class="subheader-text">Detection pipeline</div>
+        <div class="project-details-content">
+          <div class="body-text">I built the detector on YOLOv8 and treated it as a document model, not a generic object detector. Data augmentation had to look like real reports: slight rotation, compression artifacts, and crops that still contain a full table, rather than natural-image jitter that destroys layout. I tuned training hyperparameters and inference thresholds so we were not flooding reviewers with duplicate boxes or missing the small chart classes.</div>
+          <div class="body-text">Class imbalance was a real failure mode. Tables were more common than some chart types, and a naively trained detector would ignore the rare classes while looking strong on average. Addressing that imbalance — in the data and at inference — was part of getting end-to-end extraction to a point where manual review agreed with the pipeline 95% of the time, and manual processing time dropped by 60%.</div>
+        </div>
+      </div>
+
+      <div class="project-section">
+        <div class="subheader-text">OCR and question answering</div>
+        <div class="project-details-content">
+          <div class="body-text">Detection alone does not finish the job. After a box is found, the pipeline has to read it. I extended the system with downstream OCR and an LLM-based question-answering model so analysts could ask about a metric without scanning every extracted table themselves. That meant curating QA training data from the same ESG workflows, not generic trivia, and refining prompt templates so the model answered from the extracted evidence instead of freewheeling.</div>
+          <div class="body-text">I also defined evaluation metrics for response consistency and data quality. The point was not a one-off demo question; it was whether answers stayed stable across similar queries and whether the extracted values were usable downstream. Detection, OCR, and QA had to be one pipeline, because a beautiful box around the wrong chart still produces a wrong number.</div>
+        </div>
+      </div>
+
+      <div class="project-section">
+        <div class="subheader-text">Results & stack</div>
+        <div class="project-details-content">
+          <div class="body-text">End-to-end extraction reached 95% accuracy against manual review. Manual processing time dropped by 60%. The path from unlabeled client PDFs to that result was annotation specs, a custom table/chart dataset, a tuned YOLOv8 detector, then OCR and LLM question answering with its own data and metrics.</div>
+          <div class="body-text">Python · PyTorch · YOLOv8 · OCR · LLM question answering · custom document annotation</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="footer">
+      <a class="icon-link" href="mailto:yix3@andrew.cmu.edu" aria-label="Email Yi Xu">
+        <image src="../assets/icons/mail.svg" class="footer-icon"/>
+      </a>
+    </div>
+	</body>
+</html>

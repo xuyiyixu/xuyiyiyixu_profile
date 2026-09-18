@@ -7,10 +7,13 @@ html {
   -webkit-text-size-adjust: none;
   -moz-text-size-adjust: none;
   -ms-text-size-adjust: none;
+  color-scheme: light;
 }
 
 body {
   margin: 0;
+  background-color: #ffffff;
+  color: #141414;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -79,10 +82,12 @@ body {
 
 /* Project Section */
 
-#my-work-section {
+#my-work-section,
+.work-section {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  scroll-margin-top: 110px;
 }
 
 .projects-container {
@@ -129,7 +134,8 @@ body {
   height: auto;
 }
 
-#project-details {
+#project-details,
+.project-section {
   display: flex;
   flex-direction: column;
   gap: 16px;
