@@ -87,6 +87,7 @@ a.button:hover {
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
+  scroll-margin-top: 110px;
 }
 
 .footer-email {
